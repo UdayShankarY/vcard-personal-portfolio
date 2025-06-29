@@ -9,6 +9,11 @@
 
 
 
+.clients-item img {
+  height: 60px;       /* or any size you prefer */
+  width: auto;        /* maintains aspect ratio */
+  object-fit: contain; /* keeps the image within bounds */
+}
 
 
 /*-----------------------------------*\
@@ -352,6 +357,7 @@ main {
   width: max-content;
   padding: 3px 12px;
   border-radius: 8px;
+    margin-top: 50px; /* 👈 Add this line */
 }
 
 .info_more-btn {
@@ -1339,7 +1345,8 @@ textarea.form-input::-webkit-resizer { display: none; }
 
   .avatar-box { border-radius: 30px; }
 
-  .avatar-box img { width: 120px; }
+  .avatar-box img { width: 120px; 
+  border-radius: 30px;}
 
   .info-content .name { margin-bottom: 15px; }
 
