@@ -157,3 +157,101 @@ for (let i = 0; i < navigationLinks.length; i++) {
 
   });
 }
+
+
+
+let imageList = [];
+let currentImageIndex = 0;
+
+function openModal(title, description, images, projectLink, githubLink, docLink) {
+  document.getElementById("modal-title").innerText = title;
+  document.getElementById("modal-desc").innerText = description;
+
+  // Handle multiple images
+  imageList = Array.isArray(images) ? images : [images];
+  currentImageIndex = 0;
+  showImage();
+
+  const viewProjectBtn = document.getElementById("view-project-btn");
+  const githubBtn = document.getElementById("github-btn");
+  const docBtn = document.getElementById("doc-btn");
+
+  // View Project button
+  if (projectLink && projectLink.trim() !== "" && projectLink !== "#") {
+    viewProjectBtn.href = projectLink;
+    viewProjectBtn.style.display = "inline-block";
+  } else {
+    viewProjectBtn.style.display = "none";
+  }
+
+  // GitHub button
+  if (githubLink && githubLink.trim() !== "") {
+    githubBtn.href = githubLink;
+    githubBtn.style.display = "inline-block";
+  } else {
+    githubBtn.style.display = "none";
+  }
+
+  // Documentation button
+  if (docLink && docLink.trim() !== "") {
+    docBtn.href = docLink;
+    docBtn.style.display = "inline-block";
+  } else {
+    docBtn.style.display = "none";
+  }
+
+  document.getElementById("modal").style.display = "flex";
+}
+
+function showImage() {
+  const img = document.getElementById("modal-img");
+  img.src = imageList[currentImageIndex];
+}
+
+function nextImage() {
+  currentImageIndex = (currentImageIndex + 1) % imageList.length;
+  showImage();
+}
+
+function prevImage() {
+  currentImageIndex = (currentImageIndex - 1 + imageList.length) % imageList.length;
+  showImage();
+}
+
+function closeModal() {
+  document.getElementById("modal").style.display = "none";
+}
+
+
+document.querySelector(".form").addEventListener("submit", async function (e) {
+  e.preventDefault();
+
+  const fullname = document.querySelector('input[name="fullname"]').value;
+  const email = document.querySelector('input[name="email"]').value;
+  const message = document.querySelector('textarea[name="message"]').value;
+
+  const response = await fetch("http://localhost:3000/contact", {
+    method: "POST",
+    headers: { "Content-Type": "application/json" },
+    body: JSON.stringify({ fullname, email, message })
+  });
+
+  const data = await response.json();
+  if (data.success) {
+    showToast("Message sent successfully!");
+    document.querySelector(".form").reset();
+  } else {
+    showToast("Failed to send message. Try again.");
+  }
+});
+
+// ✅ Toast logic
+function showToast(text) {
+  const toast = document.getElementById("toast");
+  toast.textContent = text;
+  toast.classList.add("show");
+
+  setTimeout(() => {
+    toast.classList.remove("show");
+  }, 3000); // Hide after 3 seconds
+}
